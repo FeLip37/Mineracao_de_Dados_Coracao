@@ -1,2 +1,0 @@
-# mineracao-dados-saude-coracao
-
