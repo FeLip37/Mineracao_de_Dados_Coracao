@@ -30,17 +30,27 @@ def transform_data(df):
     if 'Heart Disease Status' in df_encoded.columns:
         df_encoded['Heart Disease Status'] = df_encoded['Heart Disease Status'].map({'No': 0, 'Yes': 1})
         
-    print("Ordinal Encoding concluído!")
+    # One-Hot Encoding (Para categorias sem hierarquia)
+    print("Aplicando One-Hot Encoding...")
+    one_hot_cols = ['Gender', 'Smoking', 'Family Heart Disease', 'Diabetes', 'High Blood Pressure', 'Low HDL Cholesterol', 'High LDL Cholesterol']
+    
+    # Filtra apenas as colunas que realmente existem no dataset
+    colunas_presentes = [col for col in one_hot_cols if col in df_encoded.columns]
+    if colunas_presentes:
+        df_encoded = pd.get_dummies(df_encoded, columns=colunas_presentes, drop_first=True)
+        
+    print("Transformação 100% concluída!")
     return df_encoded
 
 if __name__ == "__main__":
     caminho_arquivo = "data/heart_disease.csv"
     
-    # 1. Inspeção 
+    # Inspeção 
     df_bruto = load_and_inspect_data(caminho_arquivo)
     
-    # 2. Transformação (Apenas Ordinal por enquanto)
+    # Transformação (Agora com Ordinal + One-Hot)
     df_transformado = transform_data(df_bruto)
     
-    print("\nExemplo após Ordinal Encoding (Stress Level e Target):")
-    print(df_transformado[['Stress Level', 'Heart Disease Status']].head())
+    # Imprime as colunas para provar que o One-Hot Encoding funcionou
+    print("\nLista de Colunas após o One-Hot Encoding:")
+    print(list(df_transformado.columns))
