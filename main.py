@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 import matplotlib.pyplot as plt 
-import seaborn as sn 
+import seaborn as sns
 
 def load_and_inspect_data(filepath):
     print("--- INICIANDO INSPEÇÃO DE DADOS ---")
@@ -44,6 +44,29 @@ def transform_data(df):
         
     print("Transformação 100% concluída!")
     return df_encoded
+
+def handle_missing_values(df):
+    print("\n--- TRATAMENTO DE VALORES NULOS ---")
+    df_clean = df.copy()
+    
+    # Colunas numéricas: preencher com a mediana
+    cols_numericas = df_clean.select_dtypes(include=['float64', 'int64']).columns
+    for col in cols_numericas:
+        if df_clean[col].isnull().sum() > 0:
+            mediana = df_clean[col].median()
+            df_clean[col].fillna(mediana, inplace=True)
+            print(f"  {col}: nulos preenchidos com mediana ({mediana})")
+    
+    # Colunas categóricas: preencher com a moda
+    cols_categoricas = df_clean.select_dtypes(include=['object']).columns
+    for col in cols_categoricas:
+        if df_clean[col].isnull().sum() > 0:
+            moda = df_clean[col].mode()[0]
+            df_clean[col].fillna(moda, inplace=True)
+            print(f"  {col}: nulos preenchidos com moda ({moda})")
+    
+    print("Tratamento de nulos concluído!")
+    return df_clean
 
 if __name__ == "__main__":
     caminho_arquivo = "data/heart_disease.csv"
@@ -90,7 +113,7 @@ def visualize_data(df):
     print(f"Heatmap de correlação matemático salvo com sucesso em: {heatmap_path}")
 
 if __name__ == "__main__":
-    caminho_arquivo = "heart_disease.csv" 
+    caminho_arquivo = "data/heart_disease.csv" 
     
     # Inspeção 
     df_bruto = load_and_inspect_data(caminho_arquivo)
