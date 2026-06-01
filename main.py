@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 
 def load_and_inspect_data(filepath):
     print("--- INICIANDO INSPEÇÃO DE DADOS ---")
@@ -54,3 +55,10 @@ if __name__ == "__main__":
     # Imprime as colunas para provar que o One-Hot Encoding funcionou
     print("\nLista de Colunas após o One-Hot Encoding:")
     print(list(df_transformado.columns))
+
+def visualize_data(df):
+    print("\n--- GERANDO VISUALIZAÇÕES ---")
+    plot_dir = "plots"
+    
+    # Automação da criação do diretório de gráficos
+    os.makedirs(plot_dir, exist_ok=True)
