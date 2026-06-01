@@ -88,3 +88,22 @@ def visualize_data(df):
     plt.close()
     
     print(f"Heatmap de correlação matemático salvo com sucesso em: {heatmap_path}")
+
+if __name__ == "__main__":
+    caminho_arquivo = "heart_disease.csv" 
+    
+    # Inspeção 
+    df_bruto = load_and_inspect_data(caminho_arquivo)
+    
+    # Tratamento de Nulos (Adicionado anteriormente)
+    df_tratado = handle_missing_values(df_bruto)
+    
+    # Transformação (Ordinal + One-Hot)
+    df_transformado = transform_data(df_tratado)
+    
+    # [NOVO] 4. Visualização de Dados (Geração do Heatmap)
+    visualize_data(df_transformado)
+    
+    # Exportação do Dataset limpo
+    output_file = "cleaned_heart_disease.csv"
+    df_transformado.to_csv(output_file, index=False)
