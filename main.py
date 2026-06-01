@@ -1,5 +1,7 @@
 import pandas as pd
 import os
+import matplotlib.pyplot as plt 
+import seaborn as sn 
 
 def load_and_inspect_data(filepath):
     print("--- INICIANDO INSPEÇÃO DE DADOS ---")
@@ -62,3 +64,27 @@ def visualize_data(df):
     
     # Automação da criação do diretório de gráficos
     os.makedirs(plot_dir, exist_ok=True)
+
+def visualize_data(df):
+    print("\n--- GERANDO VISUALIZAÇÕES ---")
+    plot_dir = "plots"
+    os.makedirs(plot_dir, exist_ok=True)
+    
+    # Configuração do tamanho do gráfico
+    plt.figure(figsize=(12, 10))
+    
+    # Seleção de colunas numéricas para o cálculo da correlação matemática
+    cols_numericas = df.select_dtypes(include=['float64', 'int64', 'uint8', 'bool', 'int32'])
+    corr = cols_numericas.corr()
+    
+    # Geração do Heatmap
+    sns.heatmap(corr, annot=False, cmap='coolwarm', fmt=".2f", linewidths=0.5)
+    plt.title("Heatmap de Correlação Matemática das Variáveis")
+    plt.tight_layout()
+    
+    # Salvando o arquivo na pasta automatizada
+    heatmap_path = os.path.join(plot_dir, "correlation_heatmap.png")
+    plt.savefig(heatmap_path)
+    plt.close()
+    
+    print(f"Heatmap de correlação matemático salvo com sucesso em: {heatmap_path}")
